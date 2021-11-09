@@ -15,13 +15,42 @@ def interpret(tks):
         print("BELOW IS THE PARSE TREE:")
         print(ast)
         print("========================")
+    prettyPrint(ast)
     # tval = eval([],ast)                 # Evaluate the entry in an empty context.
     # val,typ = replShowTaggedValue(tval) # Report the resulting value.
     # print("val it =",val,":",typ)
 
 def prettyPrint(ast):
-    return 'f'
+    #['AP',['LM', name, theRest],defn]
+    file = open('prettyPrint.sml','w')
+    counter = 1
+    main = ''
+    endmain = ''
+    file.write('let\n')
+    while 'LM' in str(ast):
+        var = 'x'+str(counter)
+        term = 't'+str(counter)
+        file.write('    val '+var+' = "'+str(ast[1][1])+'"\n')
+        file.write('    val '+term+' = '+str(makeSMLFriendly(ast[2]))+'\n')
+        ast = ast[1][2]
+        main+='AP( LM ('+var+','
+        endmain = '),'+term+')'+endmain
+        counter+=1
+    file.write('val t = '+str(makeSMLFriendly(ast))+'\n')
+    file.write('val main = ' +main+'t'+endmain +'\n')
+    file.write('val value = norReduce main\nin\n    print (pretty value)\nend')
 
+    file.close()
+
+def makeSMLFriendly(ast):
+    first = ast[0]
+    if first is 'LM':
+        return 'LM("'+str(ast[1])+'", '+makeSMLFriendly(ast[2]) + ')'
+    if first is 'AP':
+        return 'AP( '+ str(makeSMLFriendly(ast[1])) + ', ' + str(makeSMLFriendly(ast[2])) + ')'
+    if first is 'VA':
+        return 'VA "'+str(ast[1])+'"'
+        
 def lookUpVar(x,env,err):
     for (y,v) in env:
         if y == x:
@@ -699,7 +728,7 @@ def evalAll(files):
 #        source .mml files
 #
 mtime = str(time.ctime(os.path.getmtime("./parser.py")))
-print("MiniML of Portlandia v2019F.1 [built: "+mtime+"]")
+print("LambdaCalc++ of Portlandia v2021F.1 [built: "+mtime+"]")
 if len(sys.argv) > 1:
     evalAll(sys.argv[1:])
 else:
