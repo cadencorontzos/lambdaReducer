@@ -36,9 +36,9 @@ def prettyPrint(ast):
         main+='AP( LM ('+var+','
         endmain = '),'+term+')'+endmain
         counter+=1
-    file.write('val t = '+str(makeSMLFriendly(ast))+'\n')
-    file.write('val main = ' +main+'t'+endmain +'\n')
-    file.write('val value = norReduce main\nin\n    print (pretty value)\nend')
+    file.write('    val t = '+str(makeSMLFriendly(ast))+'\n')
+    file.write('    val main = ' +main+'t'+endmain +'\n')
+    file.write('    val value = norReduce main\nin\n    print (pretty value)\nend')
 
     file.close()
 
