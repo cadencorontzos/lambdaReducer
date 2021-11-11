@@ -23,7 +23,7 @@ datatype lmda =
 
 
 fun isReducible (VA x)                = false
-  | isReducible (AP(LM(x,t), (VA s))) = true
+  | isReducible (AP(LM(x,t), s)) = true
   | isReducible (LM(x,t))             = isReducible t
   | isReducible (AP(t1,t2))           = (isReducible t1) orelse (isReducible t2)
 
@@ -32,20 +32,20 @@ fun replace x s (LM(f,p))  =  if f=x
                               else  let
                                         val fresh = getFreshVariable x
                                     in
-                                        (LM(fresh,(replace x s (replace f fresh p))))
+                                        (LM(fresh,(replace x s (replace f (VA fresh) p))))
                                     end
 
   | replace x s (AP(fs,sn)) = (AP((replace x s fs),(replace x s sn)))
-  | replace x s (VA l)     =  if l=x 
-                              then (VA s) 
-                              else (VA l)
+  | replace x s (VA l)      =   if l=x 
+                                then s 
+                                else (VA l)
 
-fun norReduceStep (AP((LM(x,t)), (VA s))) = (replace x s t)
+fun norReduceStep (AP(LM(x,t), s))  = (replace x s t)
   | norReduceStep (AP(t1,t2))       =   if (isReducible t1) 
-                                    then (AP((norReduceStep t1),t2)) 
-                                    else    if (isReducible t2) 
-                                            then (AP(t1,(norReduceStep t2)))
-                                            else (AP(t1,t2))
+                                        then (AP((norReduceStep t1),t2)) 
+                                        else    if (isReducible t2) 
+                                              then (AP(t1,(norReduceStep t2)))
+                                              else (AP(t1,t2))
   | norReduceStep (LM(x,t))         = (LM(x,(norReduceStep t)))
   | norReduceStep (VA v)            = (VA v)
   
@@ -56,7 +56,7 @@ fun pretty (VA v)       = v
 fun norReduce lm = if isReducible lm
                    then let 
                             val f = print (pretty lm)
-                            val endl = print "\n"
+                            val endl = print "|"
                         in 
                             norReduce (norReduceStep lm)
                         end

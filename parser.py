@@ -48,9 +48,9 @@ def makeSMLFriendly(ast):
         return 'LM("'+str(ast[1])+'", '+makeSMLFriendly(ast[2]) + ')'
     if first is 'AP':
         return 'AP( '+ str(makeSMLFriendly(ast[1])) + ', ' + str(makeSMLFriendly(ast[2])) + ')'
-    if first is 'VA':
+    else:
         return 'VA "'+str(ast[1])+'"'
-        
+ 
 def lookUpVar(x,env,err):
     for (y,v) in env:
         if y == x:
@@ -72,133 +72,6 @@ def getClosValue(taggedValue,errMsg):
     if not isinstance(taggedValue,list) or taggedValue[0] != "Clos":
         raise TypeError(errMsg)
     return taggedValue[1],taggedValue[2],taggedValue[3]
- 
-# def eval(env, ast):
-
-#     label = ast[0]
-
-#     #
-#     # E |- e1 V true  E |- e2 V v
-#     # ---------------------------
-#     #    E |- if(e1,e2,e3) V v
-#     #
-#     if label == 'If':
-#         e1 = ast[1]
-#         e2 = ast[2]
-#         e3 = ast[3]
-#         where = ast[-1]
-#         v1 = eval(env,e1)
-#         err = "Type error in condition at "+where+". Expected a boolean value."
-#         if getBoolValue(v1,err):
-#             return eval(env,e2)
-#         else:
-#             return eval(env,e3)
-
-#     #
-#     # E |- e1 V true  E |- e2 V v
-#     # ---------------------------
-#     #    E |- and(e1,e2) V v
-#     #
-#     elif label == 'And':
-#         e1 = ast[1]
-#         e2 = ast[2]
-#         where = ast[-1]
-#         v1 = eval(env,e1)
-#         err = "Type error in condition at "+where+". Expected a boolean value."
-#         if getBoolValue(v1,err):
-#             v2 = eval(env,e2)
-#             b = getBoolValue(v2,err)
-#             return ["Bool",b]
-#         else:
-#             return ["Bool",false]
-        
-#     #
-#     # E |- d V u  [x -> u].E |- b V v
-#     # --------------------------------
-#     #       E |- let(x,d,b) V v
-#     #
-#     elif label == 'Let':
-#         x = ast[1]
-#         d = ast[2]
-#         b = ast[3]
-#         u = eval(env,d)
-#         return eval([(x,u)]+env,b)
-
-#     #
-#     #      x in E
-#     # ------------------
-#     # E |- var(x) V E(x)
-#     #
-#     elif label == 'Var':
-#         x = ast[1]
-#         where = ast[-1]
-#         err = "Unbound variable at "+where+". "
-#         return lookUpVar(x,env,err)
-
-#     #
-#     #      
-#     # ---------------
-#     # E |- num(v) V v
-#     #
-#     elif label == 'Num':
-#         v = ast[1]
-#         return ["Int",v]
-
-#     #
-#     #      
-#     # ---------------
-#     # E |- true() V T
-#     #
-#     elif label == 'True':
-#         return ["Bool",True]
-
-#     #
-#     #      
-#     # ----------------
-#     # E |- false() V F
-#     #
-#     elif label == 'False':
-#         return ["Bool",False]
-
-#     #
-#     # E |- e1 V v1  E |- e2 V v2
-#     # --------------------------
-#     #  E |- plus(e1,e2) V v1+v2
-#     #
-#     elif label == 'Plus':
-#         e1 = ast[1]
-#         e2 = ast[2]
-#         where = ast[-1]
-#         err = "Expected an integer on the %s side of plus at "+where+". "
-#         v1 = getIntValue(eval(env,e1),err % "left")
-#         v2 = getIntValue(eval(env,e2),err % "right")
-#         return ["Int",v1+v2]
-
-#     #
-#     # E |- e1 V v1  E |- e2 V v2
-#     # --------------------------
-#     #  E |- less(e1,e2) V v1<v2
-#     #
-#     elif label == 'Less':
-#         e1 = ast[1]
-#         e2 = ast[2]
-#         where = ast[-1]
-#         err = "Expected an integer on the %s side of less at "+where+". "
-#         v1 = getIntValue(eval(env,e1),err % "left")
-#         v2 = getIntValue(eval(env,e2),err % "right")
-#         return ["Bool",v1<v2]
-
-#     else:
-#         # Unimplemented case.
-
-#         #
-#         # I do something cute/annoying below. Maybe instead 
-#         # report the AST that failed to be interpreted.
-#         # 
-#         # pretty_print(ast)
-#         #
-
-#         return ["Bottom",None]
 
 def replShowTaggedValue(taggedValue):
     if isinstance(taggedValue,list) or len(taggedValue) < 2:
@@ -466,6 +339,12 @@ class TokenStream:
         Eats a name token, making sure that such a token is next in the stream.
         """
         if self.nextIsName():
+            if '_' in self.next():
+                where = self.report()
+                err1 = "Unexpected token at "+where+". "
+                err2 = "Saw: '"+self.next()+"'. "
+                err3 = "Underscores are not allowed in variable names. "
+                raise SyntaxError(err1 + err2 + err3)
             return self.advance()
         else:
             where = self.report()
