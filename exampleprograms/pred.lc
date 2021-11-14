@@ -1,0 +1,17 @@
+succ    = fn n => fn f => fn x => f (n f x);
+zero    = (fn f => fn x => x);
+one     = succ zero;
+two     = succ one;
+three   = succ two;
+plus    = fn n => fn m => (n succ m);
+times   = fn n => fn m => m (plus n) zero;
+true    = fn f => fn s => f;
+false   = fn f => fn s => s;
+pair    = fn l => fn r => fn s => s l r;
+fst     = fn p => p true;
+snd     = fn p => p false;
+iszero  = fn n => n (fn x => false) true;
+q0      = pair zero (succ zero);
+t       = fn p => pair (succ (fst p)) (fst p);
+pred    = fn n => snd (n t q0);
+main    = pred (succ three);
