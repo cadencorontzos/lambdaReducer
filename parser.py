@@ -1,5 +1,5 @@
 
-DEBUG_PARSE = True
+DEBUG_PARSE = False
 
 import sys
 import os
@@ -181,27 +181,30 @@ def parseFunc(tokens):
     elif tokens.nextIsName():
         name = tokens.eatName()
         name = ['VA', name]
-        while tokens.nextIsName():
-            newName = tokens.eatName()
-            name = ['AP',name,['VA', newName]]
-        if tokens.next() == '(':
-            tokens.eat('(')
-            rest = parseFunc(tokens)
-            tokens.eat(')')
-            return ['AP', name, rest]
+        while tokens.nextIsName() or tokens.next() is '(':
+            if tokens.nextIsName():
+                newName = tokens.eatName()
+                name = ['AP',name,['VA', newName]]
+            if  tokens.next() == '(':
+                tokens.eat('(')
+                rest = parseFunc(tokens)
+                tokens.eat(')')
+                name = ['AP', name, rest]
         return name
+    
     elif tokens.next() == '(':
         tokens.eat('(')
         inside = parseFunc(tokens)
         tokens.eat(')')
-        if tokens.nextIsName():
-            appName = tokens.eatName()
-            return ['AP', inside,  appName]
-        elif tokens.next() == '(':
-            otherInside = parseFunc(tokens)
-            return ['AP', inside, otherInside]
-        else:
-            return inside
+        # if tokens.nextIsName():
+        #     appName = tokens.eatName()
+        #     return ['AP', inside,  appName]
+        # elif tokens.next() == '(':
+        #     otherInside = parseFunc(tokens)
+        #     return ['AP', inside, otherInside]
+        # else:
+        #     return inside
+        return inside
     else:
         where = tokens.report()
         err1 = "Unexpected token at "+where+". "
@@ -566,7 +569,7 @@ def evalAll(files):
     try:
         # Load definitions from the specified source files.
         for fname in files:
-            print("[opening "+fname+"]")
+            # print("[opening "+fname+"]")
             f = open(fname,"r")
             src = f.read()
             tks = TokenStream(src,filename=fname)
@@ -607,7 +610,7 @@ def evalAll(files):
 #        source .mml files
 #
 mtime = str(time.ctime(os.path.getmtime("./parser.py")))
-print("LambdaCalc++ of Portlandia v2021F.1 [built: "+mtime+"]")
+# print("LambdaCalc++ of Portlandia v2021F.1 [built: "+mtime+"]")
 if len(sys.argv) > 1:
     evalAll(sys.argv[1:])
 else:
