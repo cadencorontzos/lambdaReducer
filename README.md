@@ -17,10 +17,10 @@ where `<input file>` is a `.lc` file. As of now there is only one optional flag
 
 All LabmdaCalc++ files are files of plaintext with extension `.lc`. The file is a collection of defintions, along with a `main` definition in which the computation is carried out.
 ```
-    <defn> = <body>
-    <defn> = <body>
+    <defn> = <body>;
+    <defn> = <body>;
     ....
-    <main> = <body>
+    <main> = <body>;
 ```
 Where the body is composed of lambda terms. 
 

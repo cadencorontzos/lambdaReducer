@@ -1,0 +1,9 @@
+zero = (fn f => fn x => x);
+succ = fn n => fn f => fn x => f (n f x);
+plus = fn n => fn m => (n succ m);
+times = fn n => fn m => m (plus n) zero;
+one = succ zero;
+two = succ one;
+three = succ two;
+power = fn f => fn x => x (times f) one;
+main = power two (succ three);

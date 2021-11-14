@@ -1,5 +1,5 @@
 
-DEBUG_PARSE = False
+DEBUG_PARSE = True
 
 import sys
 import os

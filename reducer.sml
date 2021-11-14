@@ -23,7 +23,7 @@ datatype lmda =
 
 
 fun isReducible (VA x)                = false
-  | isReducible (AP(LM(x,t), s)) = true
+  | isReducible (AP(LM(x,t), s))      = true
   | isReducible (LM(x,t))             = isReducible t
   | isReducible (AP(t1,t2))           = (isReducible t1) orelse (isReducible t2)
 
