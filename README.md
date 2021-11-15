@@ -32,7 +32,17 @@ Where the body is composed of lambda terms.
          <name> <body>             |
          (<body>) <body>                 
 ```
-where `name` is the name of a definition defined above. 
+where `name` is the name of a definition defined above. By defining terms like this, we can manipulate those terms and return terms based on those definitions. For example
+```
+    zero    = fn f => fn x => x
+    one     = fn f => fn x => f (x)
+    two     = fn f => fn x => f (f(x))
+    three   = fn f => fn x => f (f(f(x)))
+```
+We can define integers like this.
+How terms are reduced are defined by the rules of normal order reduction. 
+To see more on normal order reduction, see this [link](https://opendsa-server.cs.vt.edu/OpenDSA/Books/PL/html/ReductionStrategies.html).
+To see more on lambda calculus in general, see [here](https://en.wikipedia.org/wiki/Lambda_calculus).
 
 ## Example Use
 
@@ -60,5 +70,5 @@ To see some example LambdaCalc++ programs, see `./exampleprograms`. There are ex
 
 Here are some possible extensions to this project that were outside the scope or there was not enough time for.
 - Efficency: As of now the code is horribly ineffecient. This is to be expected because the point of the project was to gain a better understanding of programming language basics. 
-- Running Technique: The shell script and passing output files works but is hacky. Ideally if this were a real language the process from parsing to reducing woule be a lot cleaner
+- Running Technique: The shell script and passing output files works but is hacky. Ideally if this were a real language the process from parsing to reducing woule be a more stable.
 - Final answers: The final answers have intermediary names as of now (succ_203023). A function could be writted to replace these with cleaner names (f, n, s, etc.) so that the final answer is a bit cleaner.
