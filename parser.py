@@ -196,15 +196,12 @@ def parseFunc(tokens):
         tokens.eat('(')
         inside = parseFunc(tokens)
         tokens.eat(')')
-        # if tokens.nextIsName():
-        #     appName = tokens.eatName()
-        #     return ['AP', inside,  appName]
-        # elif tokens.next() == '(':
-        #     otherInside = parseFunc(tokens)
-        #     return ['AP', inside, otherInside]
-        # else:
-        #     return inside
-        return inside
+        if tokens.next() is not ';':
+            rest = parseFunc(tokens)
+            return ['AP', inside, rest]
+        else:
+            return inside
+    
     else:
         where = tokens.report()
         err1 = "Unexpected token at "+where+". "

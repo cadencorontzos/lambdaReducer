@@ -12,5 +12,5 @@ then
 else 
     grep "val it = ()"  out.txt | sed 's/val it = () : unit/ /g' | sed 's/-  / /g' | sed 's|.*\|||' 
 fi
-# rm prettyPrint.sml
-# rm out.txt
+rm prettyPrint.sml
+rm out.txt
