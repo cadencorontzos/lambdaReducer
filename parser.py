@@ -1,5 +1,5 @@
 
-DEBUG_PARSE = True
+DEBUG_PARSE = False
 
 import sys
 import os
@@ -17,9 +17,9 @@ def interpret(tks):
         print("========================")
     prettyPrint(ast)
 
-
+# prints the ast into a sml file so that sml can reduce the terms
 def prettyPrint(ast):
-    #['AP',['LM', name, theRest],defn]
+
     file = open('prettyPrint.sml','w')
     counter = 1
     main = ''
@@ -40,6 +40,7 @@ def prettyPrint(ast):
 
     file.close()
 
+# makes the arrays look like sml datatypes
 def makeSMLFriendly(ast):
     first = ast[0]
     if first is 'LM':
@@ -170,6 +171,11 @@ DELIMITERS = '();,|'
 OPERATORS = '+-*/<>=&!:.' 
 
 
+'''
+Code from here on out (tokenizer) written by Jim Fix for CSCI 384, Reed College, Fall 2021. 
+@jimfix on github.
+
+'''
 #
 # LEXICAL ANALYSIS / TOKENIZER
 #

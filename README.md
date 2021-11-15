@@ -72,5 +72,5 @@ To see some example LambdaCalc++ programs, see `./exampleprograms`. There are ex
 
 Here are some possible extensions to this project that were outside the scope or there was not enough time for.
 - Efficency: As of now the code is horribly ineffecient. This is to be expected because the point of the project was to gain a better understanding of programming language basics. In an ideal word, some work could be done to make the functions more effecient so as to make this somewhat more feasable as an actual programming language.
-- Running Technique: The shell script and passing output files works but is hacky. Ideally if this were a real language the process from parsing to reducing woule be a more stable.
+- Running Technique: The shell script and passing output files (and grepping the answer) works but is hacky. Ideally if this were a real language the process from parsing to reducing woule be a more stable.
 - Final answers: The final answers have intermediary names as of now (succ_203023). A function could be writted to replace these with cleaner names (f, n, s, etc.) so that the final answer is a bit cleaner.
