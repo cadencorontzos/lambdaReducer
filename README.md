@@ -30,7 +30,9 @@ Where the body is composed of lambda terms.
 ```
 <body> = fn <lambdaname> => <body> |
          <name> <body>             |
-         (<body>) <body>                 
+         <lambdaname> <body>       |
+         (<body>) <body>           |
+         <lambdaname>           
 ```
 where `name` is the name of a definition defined above. By defining terms like this, we can manipulate those terms and return terms based on those definitions. For example
 ```
