@@ -16,9 +16,7 @@ def interpret(tks):
         print(ast)
         print("========================")
     prettyPrint(ast)
-    # tval = eval([],ast)                 # Evaluate the entry in an empty context.
-    # val,typ = replShowTaggedValue(tval) # Report the resulting value.
-    # print("val it =",val,":",typ)
+
 
 def prettyPrint(ast):
     #['AP',['LM', name, theRest],defn]
@@ -51,46 +49,9 @@ def makeSMLFriendly(ast):
     else:
         return 'VA "'+str(ast[1])+'"'
  
-def lookUpVar(x,env,err):
-    for (y,v) in env:
-        if y == x:
-            return v
-    raise RunTimeError("Use of variable '"+x+"'. "+err)
-
-
-def getIntValue(taggedValue,errMsg):
-    if not isinstance(taggedValue,list) or taggedValue[0] != "Int":
-        raise TypeError(errMsg)
-    return taggedValue[1]
-
-def getBoolValue(taggedValue,errMsg):
-    if not isinstance(taggedValue,list) or taggedValue[0] != "Bool":
-        raise TypeError(errMsg)
-    return taggedValue[1]
-
-def getClosValue(taggedValue,errMsg):
-    if not isinstance(taggedValue,list) or taggedValue[0] != "Clos":
-        raise TypeError(errMsg)
-    return taggedValue[1],taggedValue[2],taggedValue[3]
-
-def replShowTaggedValue(taggedValue):
-    if isinstance(taggedValue,list) or len(taggedValue) < 2:
-        val = taggedValue[1]
-        tag = taggedValue[0]
-        if tag == "Int":
-            return (repr(val),'int')
-        elif tag == "Bool":
-            return (repr(val).lower(),'bool')
-        if tag == "Clos":
-            return ('fn','fn')
-        if tag == "Bottom":
-            return ('_|_',"Error! You forgot to implement (or return something) somewhere.")
-    raise RunTimeError("Interpreter incorrectly constructed a bad value.")
-
 #
 # ------------------------------------------------------------
 #
-
 #
 # Exceptions
 #
@@ -116,33 +77,20 @@ class LexError(Exception):
 #
 # The Parser
 #
-# This is a series of mutually recursive parsing functions that
-# consume the stream of tokens. Each one corresponds to some 
-# LHS of a grammar production. Their parsing action roughly
-# corresponds to each of the case of the RHSs of productions.
-#
-# Each takes the token stream as a parameter, and returns an AST
-# of what they parsed. The AST is represented as nested Python
-# lists, with each list headed by a label (a string) and with
-# each list having a final element that's a string reporting
-# the place in the source code where their parse started.
-# So each AST node is a list of the form
-#
-#     ["Label", info1, info2, ... , infok, where]
-#
-# where "Label" gives the node type ("If", "Plus", "Num", etc.)
-# k is the "arity" of that node's constructor, and where is 
-# a string reporting the location where the parse occurred.
-#
-# That 'where' string can be used for reporting errors during
-# "semantic" checks. (e.g. during interpretation, type-checking).
+#   A series of functions that parse comments, terms, and term definitions
 #
 #
 
+def parseComment(tokens):
+    if tokens.next() == '###':
+        tokens.eat('###')
+        while tokens.next() != '###':
+            tokens.advance()
+        tokens.eat('###')
+    return parseTerm(tokens)
+
 def parseTerm(tokens):
-    #
-    # <disj> ::= <disj> orelse <conj> | <conj>
-    #
+    # parses the name part of the definiton
 
     if tokens.nextIsName():
         name = tokens.eatName()
@@ -164,11 +112,8 @@ def parseTerm(tokens):
 
 
 def parseFunc(tokens):
-    where = tokens.report()
-    # 
-    # <expn> ::= let val <name> = <expn> in <expn> end
-    #          | if <expn> then <expn> else <expn>
-    #          | fn <name> => <expn>
+    # parses the body of the definition
+
     if tokens.next() == 'fn':
         tokens.eat('fn')
         name = tokens.eatName()
@@ -216,7 +161,7 @@ def parseFunc(tokens):
 # the lexical analyzer (housed as class TokenStream, below).
 #
 
-RESERVED = ['fn', 'eof', 'main']
+RESERVED = ['fn', 'eof', 'main', '###']
 
 # Characters that separate expressions.
 DELIMITERS = '();,|'
