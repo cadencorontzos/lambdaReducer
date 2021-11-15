@@ -17,6 +17,9 @@ where `<input file>` is a `.lc` file. As of now there is only one optional flag
 
 All LabmdaCalc++ files are files of plaintext with extension `.lc`. The file is a collection of defintions, along with a `main` definition in which the computation is carried out.
 ```
+    ***
+    <comments>
+    ***
     <defn> = <body>;
     <defn> = <body>;
     ....
@@ -33,6 +36,29 @@ where `name` is the name of a definition defined above.
 
 ## Example Use
 
+Here is an example running of a test program `less.lc`. 
+
+
+```
+% sh lambdacalc.sh exampleprograms/less.lc 
+fn succ_2750785 => fn succ_2750787 => succ_2750785 
+%
+%
+```
+Where the `main` of the file looks like
+```
+    main    = less one three;
+```
+And the return is equivalent to `true`, as defined in the file.
+This and other example programs are discussed below.
 
 ## Other Example Programs
 
+To see some example LambdaCalc++ programs, see `./exampleprograms`. There are examples of simple arithmatic, logic, and simple recursive programs.
+
+## Possible Extensions
+
+Here are some possible extensions to this project that were outside the scope or there was not enough time for.
+- Efficency: As of now the code is horribly ineffecient. This is to be expected because the point of the project was to gain a better understanding of programming language basics. 
+- Running Technique: The shell script and passing output files works but is hacky. Ideally if this were a real language the process from parsing to reducing woule be a lot cleaner
+- Final answers: The final answers have intermediary names as of now (succ_203023). A function could be writted to replace these with cleaner names (f, n, s, etc.) so that the final answer is a bit cleaner.
