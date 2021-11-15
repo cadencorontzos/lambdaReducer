@@ -8,7 +8,7 @@ import time
 
 
 def interpret(tks):
-    ast = parseTerm(tks)                # Parse the entry.
+    ast = parseComment(tks)                # Parse the entry.
     tks.checkEOF()                      # Check if everything was consumed by the parse
     if DEBUG_PARSE:
         print("==debug mode============")
@@ -82,11 +82,11 @@ class LexError(Exception):
 #
 
 def parseComment(tokens):
-    if tokens.next() == '###':
-        tokens.eat('###')
-        while tokens.next() != '###':
+    if tokens.next() == '***':
+        tokens.eat('***')
+        while tokens.next() != '***':
             tokens.advance()
-        tokens.eat('###')
+        tokens.eat('***')
     return parseTerm(tokens)
 
 def parseTerm(tokens):

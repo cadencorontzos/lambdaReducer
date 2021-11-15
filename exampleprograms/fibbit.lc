@@ -1,3 +1,10 @@
+***
+FIBBIT 
+    Calculates the n-th fibbonacci number. This program relies on bounded iteration. 
+    It starts with a base pair, then performs some operation on that pair n times.
+    It is then able to extract the answer from that resultant pair.
+
+***
 succ        = fn n => fn f => fn x => f (n f x);
 zero        = (fn f => fn x => x);
 one         = succ zero;

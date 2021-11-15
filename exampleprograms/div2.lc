@@ -1,3 +1,7 @@
+***
+DIV2 
+    Integer division of n by two. Uses bounded iteration.
+***
 succ        = fn n => fn f => fn x => f (n f x);
 zero        = (fn f => fn x => x);
 one         = succ zero;

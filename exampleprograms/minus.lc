@@ -1,3 +1,9 @@
+***
+MINUS 
+    Calculates m minus n. If the result is negative, returns 0. Relies on the concept
+    of a predecessor (see pred.lc)
+
+***
 succ    = fn n => fn f => fn x => f (n f x);
 zero    = (fn f => fn x => x);
 one     = succ zero;

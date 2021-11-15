@@ -1,3 +1,9 @@
+***
+PRED 
+    Calculates the predecessor of a number (i.e, n-1). It does this by using pairs,
+    fst and snd (which return the first and second of the pair respectively), and 
+    bounded iteration.
+***
 succ    = fn n => fn f => fn x => f (n f x);
 zero    = (fn f => fn x => x);
 one     = succ zero;

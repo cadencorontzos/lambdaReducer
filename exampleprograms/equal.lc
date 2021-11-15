@@ -1,3 +1,7 @@
+***
+EQUAL 
+    Checks whether two numbers are equal. Relies on subtraction (see minus.lc)
+***
 succ    = fn n => fn f => fn x => f (n f x);
 zero    = (fn f => fn x => x);
 one     = succ zero;
