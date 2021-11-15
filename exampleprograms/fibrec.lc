@@ -1,3 +1,9 @@
+***
+FIBREC 
+    finds the n-th fibbonacci number using recurison. It does recursion via the Y combinator
+    see https://en.wikipedia.org/wiki/Fixed-point_combinator
+    And also relies on some of the other example functions
+***
 succ        = fn n => fn f => fn x => f (n f x);
 zero        = (fn f => fn x => x);
 one         = succ zero;
@@ -24,4 +30,4 @@ if          = fn i => fn t => fn e => (pair t e) i ;
 Y           = fn g => (fn y => g (y y)) (fn y => g (y y));
 fib         = fn f => fn n => if (iszero n) (zero) (if (equal one n) (one) (if (equal two n) (one) (plus (f (pred n)) (f (pred (pred n))))));
 fibrec      = Y fib;
-main        = fibrec ten;
+main        = fibrec (succ five);

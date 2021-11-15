@@ -1,3 +1,8 @@
+***
+GCD 
+    calculates the Greatest common divisor of two numbers using the Y combinator and 
+    Euclidian algorithm. Relies on minus and equal (see minus.lc, equal.lc)
+***
 succ        = fn n => fn f => fn x => f (n f x);
 zero        = (fn f => fn x => x);
 one         = succ zero;
