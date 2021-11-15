@@ -58,6 +58,7 @@ fun pretty (VA v)       = v
   | pretty (AP(t1,t2))  = " "^(pretty t1)^"  ( "^(pretty t2)^" ) "
 
 (* Reduces a lambda term *)
+(* Take the print statement out if you're running recursive code. The output file will be several gigabytes. This needs to be fixed/worked around in some way *)
 fun norReduce lm = if isReducible lm
                    then let 
                             val f = print (pretty lm)

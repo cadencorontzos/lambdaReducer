@@ -34,7 +34,7 @@ Where the body is composed of lambda terms.
          (<body>) <body>           |
          <lambdaname>           
 ```
-where `name` is the name of a definition defined above. By defining terms like this, we can manipulate those terms and return terms based on those definitions. For example
+where `name` is the name of a different definition defined above the current definition. By defining terms like this, we can manipulate those terms and return terms based on those definitions. For example
 ```
     zero    = fn f => fn x => x
     one     = fn f => fn x => f (x)
