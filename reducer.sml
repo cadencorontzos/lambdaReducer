@@ -51,7 +51,7 @@ fun norReduceStep (AP(LM(x,t), s))  = (replace x s t)
   
 fun pretty (VA v)       = v 
   | pretty (LM(s,t))    = "fn "^s^" => "^(pretty t)
-  | pretty (AP(t1,t2))  = " ( "^(pretty t1)^" ) ( "^(pretty t2)^" ) "
+  | pretty (AP(t1,t2))  = " "^(pretty t1)^"  ( "^(pretty t2)^" ) "
 
 fun norReduce lm = if isReducible lm
                    then let 
